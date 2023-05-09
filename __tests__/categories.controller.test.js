@@ -29,8 +29,10 @@ describe("GET /api/categories", () => {
       .get("/api/categories")
       .expect(200)
       .then((response) => {
-        const firstCategory = response.body[0];
+        const categoryArray = response.body;
+        const firstCategory = categoryArray[0];
         const fistCategoryKeys = Object.keys(firstCategory);
+        expect(categoryArray.length === 4).toBe(true);
         expect(typeof firstCategory).toBe("object");
         expect(fistCategoryKeys.length).toBe(2);
         expect(Object.hasOwn(firstCategory, "slug")).toBe(true);
