@@ -1,8 +1,8 @@
-const request = require('supertest');
-const app = require('../app.js');
-const connection = require('../db/connection.js');
-const testData = require('../db/data/test-data/index.js');
-const seed = require('../db/seeds/seed.js');
+const request = require("supertest");
+const app = require("../app.js");
+const connection = require("../db/connection.js");
+const testData = require("../db/data/test-data/index.js");
+const seed = require("../db/seeds/seed.js");
 
 beforeEach(() => {
   return seed(testData);
@@ -31,10 +31,10 @@ describe("GET /api/categories", () => {
       .then((response) => {
         const firstCategory = response.body[0];
         const fistCategoryKeys = Object.keys(firstCategory);
-        expect(typeof firstCategory).toBe('object');
+        expect(typeof firstCategory).toBe("object");
         expect(fistCategoryKeys.length).toBe(2);
-        expect(Object.hasOwn(firstCategory, 'slug')).toBe(true);
-        expect(Object.hasOwn(firstCategory, 'description')).toBe(true);
+        expect(Object.hasOwn(firstCategory, "slug")).toBe(true);
+        expect(Object.hasOwn(firstCategory, "description")).toBe(true);
       });
   });
 });
