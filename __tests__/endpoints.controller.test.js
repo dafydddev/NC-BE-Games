@@ -26,9 +26,10 @@ describe("GET /api", () => {
       .then((response) => {
         const endpointObject = response.body;
         const endpointKeys = Object.keys(endpointObject);
-        expect(endpointKeys.length === 2).toBe(true);
+        expect(endpointKeys.length === 3).toBe(true);
         expect(Object.hasOwn(endpointObject, 'GET /api')).toBe(true);
         expect(Object.hasOwn(endpointObject, 'GET /api/categories')).toBe(true);
+        expect(Object.hasOwn(endpointObject, 'GET /api/reviews/:review_id')).toBe(true);
       });
   });
 });
