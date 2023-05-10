@@ -1,6 +1,7 @@
 const request = require("supertest");
 const app = require("../app.js");
 const connection = require("../db/connection.js");
+const endpointJSON = require("../endpoints.json");
 
 afterAll(() => {
   return connection.end();
@@ -25,11 +26,7 @@ describe("GET /api", () => {
       .expect(200)
       .then((response) => {
         const endpointObject = response.body;
-        const endpointKeys = Object.keys(endpointObject);
-        expect(endpointKeys.length === 3).toBe(true);
-        expect(Object.hasOwn(endpointObject, 'GET /api')).toBe(true);
-        expect(Object.hasOwn(endpointObject, 'GET /api/categories')).toBe(true);
-        expect(Object.hasOwn(endpointObject, 'GET /api/reviews/:review_id')).toBe(true);
+        expect(endpointObject).toEqual(endpointJSON);
       });
   });
 });
