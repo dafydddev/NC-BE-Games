@@ -2,8 +2,9 @@ const express = require("express");
 const app = express();
 const { getCategories } = require("./controllers/categories.controllers");
 const { getReview } = require("./controllers/reviews.controllers");
+const { readEndpoints } = require("./controllers/endpoints.controllers");
 
-app.get("/api", (req, res) => res.status(200).send({ message: "All Ok" }));
+app.get("/api", readEndpoints);
 
 app.get("/api/categories", getCategories);
 app.get("/api/reviews/:review_id", getReview);
