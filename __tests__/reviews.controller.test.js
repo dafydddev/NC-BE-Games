@@ -275,4 +275,18 @@ describe("PATCH /api/reviews/:review_id", () => {
         });
       });
   });
+  test("PATCH /api/reviews/:review_id should output appropriate error messages when passed an invalid id", () => {
+    validVotes = {
+      inc_votes: 1
+    };
+    return request(app)
+    .patch("/api/reviews/jhsfjksdf")
+    .send(validVotes)
+    .expect(400)
+      .then((response) => {
+        expect(response.body).toEqual({
+          msg: "Bad Request",
+        });
+      });
+  });
 });
