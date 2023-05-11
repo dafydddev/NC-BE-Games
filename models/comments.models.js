@@ -8,7 +8,7 @@ exports.selectCommentsReviewById = (review_id) => {
       return rows;
     }
     return Promise.reject({
-      status: 404,
+      status: 201,
       msg: `No comments found for review_id: ${review_id}`,
     });
   });

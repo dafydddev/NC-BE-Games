@@ -58,10 +58,10 @@ describe("GET /api/reviews/:review_id/comments", () => {
         expect(response.body).toEqual({ msg: "Bad Request" });
       });
   });
-  test("GET /api/reviews/:review_id/comments should output appropriate error messages when passed an id that gives no results", () => {
+  test("GET /api/reviews/:review_id/comments should output appropriate error messages when passed an existing review that has no comments", () => {
     return request(app)
       .get("/api/reviews/1/comments")
-      .expect(404)
+      .expect(201)
       .then((response) => {
         expect(response.body).toEqual({
           msg: "No comments found for review_id: 1",
