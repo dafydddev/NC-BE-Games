@@ -133,3 +133,40 @@ describe('POST /api/reviews/:review_id/comments', () => {
     });
   });
 });
+describe('DELETE /api/comments/:comment_id', () => {
+  test("DELETE /api/comments/:comment_id should return 204 status code", () => {
+    return request(app)
+    .delete('/api/comments/1')
+    .expect(204);
+  });
+  test("DELETE /api/comments/:comment_id should not return anything", () => {
+    return request(app)
+    .delete('/api/comments/1')
+    .expect(204)
+    .then((returnedData) => {
+      expect(returnedData === undefined);
+    });
+  });
+  test("DELETE /api/comments/:comment_id should not return anything", () => {
+    return request(app)
+    .delete('/api/comments/1')
+    .expect(204)
+    .then((returnedData) => {
+      expect(returnedData === undefined);
+    });
+  });
+  test("DELETE /api/comments/:comment_id should output appropriate error messages when passed an invalid id", () => {
+    return request(app)
+    .delete('/api/comments/adfhjsdf')
+    .expect(400).then((returnedError) => {
+      expect(returnedError.body).toEqual({ msg: "Bad Request" });
+    });
+  });
+  test("DELETE /api/comments/:comment_id should output appropriate error messages an id that does not exist", () => {
+    return request(app)
+    .delete('/api/comments/100')
+    .expect(404).then((returnedError) => {
+      expect(returnedError.body).toEqual({ msg: "No comments found for comment_id: 100" });
+    });
+  });
+});
