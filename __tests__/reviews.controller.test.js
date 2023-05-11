@@ -261,4 +261,18 @@ describe("PATCH /api/reviews/:review_id", () => {
         expect(returnedError.body).toEqual({ msg: "inc_votes is required and value must be greater or less than 0" });
       })
   });
+  test("PATCH /api/reviews/:review_id should output appropriate error messages when passed an id that gives no results", () => {
+    validVotes = {
+      inc_votes: 1
+    };
+    return request(app)
+    .patch("/api/reviews/100")
+    .send(validVotes)
+    .expect(404)
+      .then((response) => {
+        expect(response.body).toEqual({
+          msg: "No review found for review_id: 100",
+        });
+      });
+  });
 });
