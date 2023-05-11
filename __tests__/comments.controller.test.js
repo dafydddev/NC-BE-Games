@@ -70,7 +70,7 @@ describe("GET /api/reviews/:review_id/comments", () => {
   });
 });
 describe('POST /api/reviews/:review_id/comments', () => {
-  test("POST /api/reviews/:review_id/comments should return 200 status code", () => {
+  test("POST /api/reviews/:review_id/comments should return 201 status code", () => {
     const validComment = {
       "username": "mallionaire",
       "body": "blah"
