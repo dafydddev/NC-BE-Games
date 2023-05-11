@@ -13,3 +13,12 @@ exports.selectCommentsReviewById = (review_id) => {
     });
   });
 };
+
+exports.insertCommentByReviewId = (review_id, username, body) => {
+  const commentQuery = 'INSERT INTO comments (review_id, author, body) VALUES ($1, $2, $3) RETURNING *';
+  const values = [review_id, username, body];
+  return connection.query(commentQuery, values)
+  .then(({rows}) => {
+    return rows[0].body;
+  });
+};
