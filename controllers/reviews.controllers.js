@@ -25,7 +25,7 @@ exports.patchReviewVotes = (req, res, next) => {
   const { review_id } = req.params;
   const { inc_votes } = req.body;
   if (!inc_votes) {
-    res.status(400).send({ msg: "inc_votes is required" });
+    res.status(400).send({ msg: "inc_votes is required and value must be greater or less than 0" });
   } else {
     updateReviewVotesById(review_id, inc_votes)
       .then((returnedReview) => {

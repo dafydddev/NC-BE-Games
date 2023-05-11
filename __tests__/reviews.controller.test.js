@@ -234,7 +234,7 @@ describe("PATCH /api/reviews/:review_id", () => {
       .send(emptyObject)
       .expect(400)
       .then((returnedError) => {
-        expect(returnedError.body).toEqual({ msg: "inc_votes is required" });
+        expect(returnedError.body).toEqual({ msg: "inc_votes is required and value must be greater or less than 0" });
       })
   });
   test("PATCH /api/reviews/:review_id should output appropriate error messages when passed object with invalid inc_votes key", () => {
@@ -247,6 +247,18 @@ describe("PATCH /api/reviews/:review_id", () => {
       .expect(400)
       .then((returnedError) => {
         expect(returnedError.body).toEqual({ msg: "Bad Request" });
+      })
+  });
+  test("PATCH /api/reviews/:review_id should output appropriate error messages when passed inc votes with 0 value", () => {
+    invalidVotes = {
+      inc_votes: 0
+    };
+    return request(app)
+      .patch("/api/reviews/1")
+      .send(invalidVotes)
+      .expect(400)
+      .then((returnedError) => {
+        expect(returnedError.body).toEqual({ msg: "inc_votes is required and value must be greater or less than 0" });
       })
   });
 });
