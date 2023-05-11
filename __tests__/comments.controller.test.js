@@ -69,3 +69,67 @@ describe("GET /api/reviews/:review_id/comments", () => {
       });
   });
 });
+describe('POST /api/reviews/:review_id/comments', () => {
+  test("POST /api/reviews/:review_id/comments should return 200 status code", () => {
+    const validComment = {
+      "username": "mallionaire",
+      "body": "blah"
+    }
+    return request(app)
+    .post('/api/reviews/1/comments')
+    .send(validComment)
+    .expect(201);
+  });
+  test("POST /api/reviews/:review_id/comments should return an object with body key and string value", () => {
+    const validComment = {
+      "username": "mallionaire",
+      "body": "blah"
+    }
+    return request(app)
+    .post('/api/reviews/1/comments')
+    .send(validComment)
+    .expect(201).then((returnedComment) => {
+      const commentObject = returnedComment.body;
+      const commentKeys = Object.keys(commentObject);
+      expect(typeof commentObject).toBe('object');
+      expect(commentKeys.length).toBe(1);
+      expect(Object.hasOwn(commentObject, 'body')).toBe(true);
+      expect(typeof commentObject.body).toBe('string');
+      expect(commentObject.body).toBe(validComment.body);
+    });
+  });
+  test("POST /api/reviews/:review_id/comments should output appropriate error messages when not passed username", () => {
+    const noUsername = {
+      "body": "blah"
+    }
+    return request(app)
+    .post('/api/reviews/1/comments')
+    .send(noUsername)
+    .expect(400).then((returnedError) => {
+      expect(returnedError.body).toEqual({ msg: "username and body are required" });
+    });
+  });
+  test("POST /api/reviews/:review_id/comments should output appropriate error messages when not passed body", () => {
+    const noBody = {
+      "username": "mallionaire"
+    }
+    return request(app)
+    .post('/api/reviews/1/comments')
+    .send(noBody)
+    .expect(400).then((returnedError) => {
+      expect(returnedError.body).toEqual({ msg: "username and body are required" });
+    });
+  });
+  test("POST /api/reviews/:review_id/comments should output appropriate error messages when passed username not in database", () => {
+    const badUsername = {
+      "username": "iDoNotExistInTheTestDatabase",
+      "body": "blah"
+    }
+    return request(app)
+    .post('/api/reviews/1/comments')
+    .send(badUsername)
+    .expect(400).then((returnedError) => {
+      expect(returnedError.body).toEqual({ msg: "Bad Request" });
+    });
+  });
+});
