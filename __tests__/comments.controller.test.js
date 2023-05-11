@@ -147,14 +147,6 @@ describe('DELETE /api/comments/:comment_id', () => {
       expect(returnedData === undefined);
     });
   });
-  test("DELETE /api/comments/:comment_id should not return anything", () => {
-    return request(app)
-    .delete('/api/comments/1')
-    .expect(204)
-    .then((returnedData) => {
-      expect(returnedData === undefined);
-    });
-  });
   test("DELETE /api/comments/:comment_id should output appropriate error messages when passed an invalid id", () => {
     return request(app)
     .delete('/api/comments/adfhjsdf')
