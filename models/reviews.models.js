@@ -19,3 +19,10 @@ exports.selectReviewById = (review_id) => {
     });
   });
 };
+
+exports.updateReviewVotesById = (review_id, inc_votes) => {
+  const reviewQuery = "UPDATE reviews SET votes = votes + $1 WHERE review_id = $2 RETURNING *;";
+  return connection.query(reviewQuery, [inc_votes, review_id]).then(({ rows }) => {
+    return rows[0];
+  });
+};
