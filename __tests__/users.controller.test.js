@@ -30,14 +30,16 @@ describe("GET /api/users", () => {
       .expect(200)
       .then((response) => {
         const usersArray = response.body;
-        const firstUser = usersArray[0];
-        const fistUserKeys = Object.keys(firstUser);
-        expect(usersArray.length === 4).toBe(true);
-        expect(typeof firstUser).toBe("object");
-        expect(fistUserKeys.length).toBe(3);
-        expect(Object.hasOwn(firstUser, "username")).toBe(true);
-        expect(Object.hasOwn(firstUser, "name")).toBe(true);
-        expect(Object.hasOwn(firstUser, "avatar_url")).toBe(true);
+        const expectedObjects = usersArray.every((user) => {
+          const userKeys = Object.keys(user);
+          return (
+            userKeys.length === 3 &&
+            Object.hasOwn(user, "username") &&
+            Object.hasOwn(user, "name") &&
+            Object.hasOwn(user, "avatar_url")
+          );
+        });
+        expect(expectedObjects).toBe(true);
       });
   });
 });
