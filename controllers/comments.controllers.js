@@ -17,9 +17,7 @@ exports.postCommentById = (req, res, next) => {
   const { review_id } = req.params;
   const { username, body } = req.body;
   if (!username || !body) {
-    res
-      .status(400)
-      .send({ msg: "username and body are required" });
+    res.status(400).send({ msg: "username and body are required" });
   } else {
     insertCommentByReviewId(review_id, username, body)
       .then((returnedComment) => {
@@ -32,8 +30,8 @@ exports.postCommentById = (req, res, next) => {
 exports.removeComment = (req, res, next) => {
   const { comment_id } = req.params;
   deleteCommentByCommentId(comment_id)
-  .then(() => {
-    res.status(204).send();
-  })
-  .catch(next);
-}
+    .then(() => {
+      res.status(204).send();
+    })
+    .catch(next);
+};
