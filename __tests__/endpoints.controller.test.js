@@ -9,9 +9,8 @@ afterAll(() => {
 
 describe("GET /api", () => {
   test("GET /api should return 200 status code", () => {
-    return request(app).get("/api/categories").expect(200);
+    return request(app).get("/api").expect(200);
   });
-
   test("GET /api should return an object", () => {
     return request(app)
       .get("/api")
