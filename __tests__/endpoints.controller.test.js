@@ -1,6 +1,13 @@
 const request = require("supertest");
 const app = require("../app.js");
 const connection = require("../db/connection.js");
+const endpointJSON = require("../endpoints.json");
+const testData = require("../db/data/test-data/index.js");
+const seed = require("../db/seeds/seed.js");
+
+beforeEach(() => {
+  return seed(testData);
+});
 
 afterAll(() => {
   return connection.end();
@@ -8,9 +15,8 @@ afterAll(() => {
 
 describe("GET /api", () => {
   test("GET /api should return 200 status code", () => {
-    return request(app).get("/api/categories").expect(200);
+    return request(app).get("/api").expect(200);
   });
-
   test("GET /api should return an object", () => {
     return request(app)
       .get("/api")
@@ -25,10 +31,7 @@ describe("GET /api", () => {
       .expect(200)
       .then((response) => {
         const endpointObject = response.body;
-        const endpointKeys = Object.keys(endpointObject);
-        expect(endpointKeys.length === 2).toBe(true);
-        expect(Object.hasOwn(endpointObject, 'GET /api')).toBe(true);
-        expect(Object.hasOwn(endpointObject, 'GET /api/categories')).toBe(true);
+        expect(endpointObject).toEqual(endpointJSON);
       });
   });
 });

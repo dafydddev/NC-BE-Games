@@ -1,5 +1,16 @@
 const request = require("supertest");
 const app = require("../app.js");
+const connection = require("../db/connection.js");
+const testData = require("../db/data/test-data/index.js");
+const seed = require("../db/seeds/seed.js");
+
+beforeEach(() => {
+  return seed(testData);
+});
+
+afterAll(() => {
+  return connection.end();
+});
 
 describe("GET /api/ non-existent endpoint", () => {
   test("GET /api/{non-existent endpoint} should return 404 status code", () => {
