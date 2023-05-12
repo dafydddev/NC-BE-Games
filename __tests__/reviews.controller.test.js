@@ -155,6 +155,16 @@ describe("GET /api/reviews sorting", () => {
         });
       });
   });
+  test("GET /api/reviews GET /api/reviews should give an appropriate error message when attempting to sort by anything not a column", () => {
+    return request(app)
+      .get("/api/reviews?sort_by=randomString")
+      .expect(400)
+      .then((response) => {
+        expect(response.body).toEqual({
+          msg: "Invalid sort query",
+        });
+      });
+  });
 });
 
 describe("GET /api/reviews ordering", () => {
@@ -222,13 +232,23 @@ describe("GET /api/reviews ordering", () => {
         });
       });
   });
-  test("GET /api/reviews should be able to manually  by another value and manually ordered asc", () => {
+  test("GET /api/reviews should be able to manually sort by another value and manually ordered asc", () => {
     return request(app)
       .get("/api/reviews?sort_by=designer&&order=asc")
       .expect(200)
       .then((response) => {
         expect(response.body).toBeSorted({
           key: "designer",
+        });
+      });
+  });
+  test("GET /api/reviews GET /api/reviews should give an appropriate error message when attempting to order by anything not asc or desc", () => {
+    return request(app)
+      .get("/api/reviews?order=randomString")
+      .expect(400)
+      .then((response) => {
+        expect(response.body).toEqual({
+          msg: "Invalid order query",
         });
       });
   });
@@ -246,6 +266,16 @@ describe("GET /api/reviews category filtering", () => {
         });
         expect(categoryArray.length === 11).toBe(true);
         expect(correctValues).toBe(true);
+      });
+  });
+  test("GET /api/reviews should give an appropriate error message when attempting to filter by category that does not exist", () => {
+    return request(app)
+      .get("/api/reviews?category=randomString")
+      .expect(404)
+      .then((response) => {
+        expect(response.body).toEqual({
+          msg: "No games found in randomString category",
+        });
       });
   });
 });

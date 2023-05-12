@@ -48,7 +48,7 @@ exports.selectAllReviews = (sort_by, order, category) => {
     }
     return Promise.reject({
       status: 404,
-      msg: "No reviews found"
+      msg: `No games found in ${category} category`
     });
   });
 };
