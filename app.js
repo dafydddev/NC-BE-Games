@@ -3,6 +3,7 @@ const app = express();
 const { getCategories } = require("./controllers/categories.controllers");
 const { getReview, getAllReviews, patchReviewVotes } = require("./controllers/reviews.controllers");
 const { readEndpoints } = require("./controllers/endpoints.controllers");
+const { getUsers } = require("./controllers/users.controllers");
 const { getCommentById, postCommentById, removeComment } = require("./controllers/comments.controllers");
 const { handleCustomErrors, handlePsqlErrors, handleServerErrors } = require("./errors");
 
@@ -12,6 +13,8 @@ app.get("/api", readEndpoints);
 
 app.get("/api", readEndpoints);
 app.get("/api/categories", getCategories);
+
+app.get("/api/users", getUsers);
 
 app.get("/api/reviews", getAllReviews);
 app.get("/api/reviews/:review_id", getReview);
