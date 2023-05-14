@@ -4,7 +4,6 @@
   },
   "GET /api/categories": {
     "description": "serves an array of all categories",
-    "queries": [],
     "exampleResponse": {
       "categories": [
         {
@@ -15,8 +14,12 @@
     }
   },
   "GET /api/reviews": {
-    "description": "serves an array of all reviews without review body and with comment count for each review, sorted by created by date",
-    "queries": [],
+    "description": "serves an array of all reviews without review body and with comment count for each review, by default sorted by created by date",
+    "queries": {
+      "category": "which selects the reviews by the category value specified in the query. If the query is omitted the endpoint should respond with all reviews.",
+      "sort_by": "which sorts the articles by any valid column (defaults to date)",
+      "order": "asc or desc for ascending or descending (defaults to descending)"
+    },
     "exampleResponse": [
       {
         "owner": "mallionaire",
@@ -66,7 +69,6 @@
   },
   "GET /api/reviews/:review_id": {
     "description": "serves a review object by review_id",
-    "queries": [],
     "exampleResponse": {
       "review_id": 10,
       "title": "Build you own tour de Yorkshire",
@@ -81,7 +83,6 @@
   },
   "PATCH /api/reviews/:review_id": {
     "description": "updates votes of a review by review_id, takes an object with inc_votes key and int value (above or below 0) and increments or decrements that reviews votes by the passed value",
-    "queries": [],
     "exampleRequest": {
       "inc_votes": 1
     },
@@ -99,7 +100,6 @@
   },
   "GET /api/reviews/:review_id/comments": {
     "description": "serves a comments array with by review_id, sorted by created by date",
-    "queries": [],
     "exampleResponse": [
       {
         "comment_id": 59,
@@ -121,7 +121,6 @@
   },
   "POST /api/reviews/:review_id/comments": {
     "description": "adds a comment by review_id, takes a username and body, and returns added comment",
-    "queries": [],
     "exampleRequest": {
       "inc_votes": 1
     },
@@ -131,7 +130,6 @@
   },
   "DELETE /api/comments/:comment_id": {
     "description": "removes a comment by comments_id, returns nothing",
-    "queries": [],
     "exampleResponse": "No body returned for response"
   }
 }
