@@ -39,8 +39,44 @@ describe("GET /api/users", () => {
             Object.hasOwn(user, "avatar_url")
           );
         });
-        expect(usersArray.length).toBe(4)
+        expect(usersArray.length).toBe(4);
         expect(expectedObjects).toBe(true);
+      });
+  });
+});
+describe("GET /api/users/:username", () => {
+  test("GET /api/users/:username should return 200 status code with a valid username", () => {
+    return request(app).get("/api/users/mallionaire").expect(200);
+  });
+  test("GET /api/users/:username should return an object with a valid username", () => {
+    return request(app)
+      .get("/api/users/mallionaire")
+      .expect(200)
+      .then((response) => {
+        expect(typeof response.body).toBe("object");
+      });
+  });
+  test("GET /api/users/:username should return an object with username, avatar_url, and name keys", () => {
+    return request(app)
+      .get("/api/users/mallionaire")
+      .expect(200)
+      .then((response) => {
+        const user = response.body;
+        const userKeys = Object.keys(user);
+        expect(userKeys.length).toBe(3);
+        expect(Object.hasOwn(user, "username")).toBe(true);
+        expect(Object.hasOwn(user, "avatar_url")).toBe(true);
+        expect(Object.hasOwn(user, "name")).toBe(true);
+      });
+  });
+  test("GET /api/users/:username should output appropriate error messages when passed a username that gives no results ", () => {
+    return request(app)
+      .get("/api/users/thisUserIsNotInTheTestDatabase")
+      .expect(404)
+      .then((response) => {
+        expect(response.body).toEqual({
+          msg: "No user found for username: thisUserIsNotInTheTestDatabase",
+        });
       });
   });
 });

@@ -17,7 +17,7 @@ const {
   handlePsqlErrors,
   handleServerErrors,
 } = require("./errors");
-const { getUsers } = require("./controllers/users.controllers");
+const { getAllUsers, getUser } = require("./controllers/users.controllers");
 
 app.use(express.json());
 
@@ -26,7 +26,8 @@ app.get("/api", readEndpoints);
 app.get("/api", readEndpoints);
 app.get("/api/categories", getCategories);
 
-app.get("/api/users", getUsers);
+app.get("/api/users", getAllUsers);
+app.get("/api/users/:username", getUser);
 
 app.get("/api/reviews", getAllReviews);
 app.get("/api/reviews/:review_id", getReview);
