@@ -268,13 +268,22 @@ describe("GET /api/reviews category filtering", () => {
         expect(correctValues).toBe(true);
       });
   });
+  test("GET /api/reviews should give an empty array with passed a valid category that has no games", () => {
+    return request(app)
+      .get("/api/reviews?category=children%27s%20games")
+      .expect(200)
+      .then((response) => {
+        const categoryArray = response.body;
+        expect(categoryArray.length === 0).toBe(true);
+      });
+  });
   test("GET /api/reviews should give an appropriate error message when attempting to filter by category that does not exist", () => {
     return request(app)
       .get("/api/reviews?category=randomString")
-      .expect(404)
+      .expect(400)
       .then((response) => {
         expect(response.body).toEqual({
-          msg: "No games found in randomString category",
+          msg: "Invalid category query",
         });
       });
   });
