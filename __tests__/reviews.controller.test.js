@@ -283,7 +283,6 @@ describe("GET /api/reviews category filtering", () => {
       });
   });
 });
-
 describe("GET /api/reviews/:review_id", () => {
   test("GET /api/reviews/:review_id should return 200 status code", () => {
     return request(app).get("/api/reviews/1").expect(200);
@@ -303,7 +302,7 @@ describe("GET /api/reviews/:review_id", () => {
       .then((response) => {
         const review = response.body;
         const reviewKeys = Object.keys(review);
-        expect(reviewKeys.length === 9).toBe(true);
+        expect(reviewKeys.length === 10).toBe(true);
         expect(Object.hasOwn(review, "review_id")).toBe(true);
         expect(Object.hasOwn(review, "title")).toBe(true);
         expect(Object.hasOwn(review, "review_body")).toBe(true);
@@ -313,6 +312,25 @@ describe("GET /api/reviews/:review_id", () => {
         expect(Object.hasOwn(review, "category")).toBe(true);
         expect(Object.hasOwn(review, "owner")).toBe(true);
         expect(Object.hasOwn(review, "created_at")).toBe(true);
+        expect(Object.hasOwn(review, "comment_count")).toBe(true);
+      });
+  });
+  test("GET /api/reviews/:review_id should output the correct comment count when review has no comments", () => {
+    return request(app)
+      .get("/api/reviews/1")
+      .expect(200)
+      .then((response) => {
+        const review = response.body;
+        expect(review.comment_count).toBe(0);
+      });
+  });
+  test("GET /api/reviews/:review_id should output the correct comment count when review has comments", () => {
+    return request(app)
+      .get("/api/reviews/2")
+      .expect(200)
+      .then((response) => {
+        const review = response.body;
+        expect(review.comment_count).toBe(3);
       });
   });
   test("GET /api/reviews/:review_id should output appropriate error messages when passed an invalid id", () => {

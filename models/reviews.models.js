@@ -1,5 +1,17 @@
 const connection = require("../db/connection.js");
 
+exports.validateCategory = (category) => {
+  return connection
+    .query("SELECT * FROM categories WHERE slug = $1;", [category])
+    .then(({ rows }) => {
+      if (rows.length > 0) {
+        Promise.resolve();
+      } else {
+        return Promise.reject({ status: 400, msg: "Invalid category query" });
+      }
+    });
+};
+
 exports.selectAllReviews = (sortBy, order, category) => {
   const validSorts = [
     "owner",
@@ -32,17 +44,7 @@ exports.selectAllReviews = (sortBy, order, category) => {
     reviewQuery += " WHERE category = $1";
     queryValues.push(category);
   }
-  reviewQuery += `
-    GROUP BY 
-      reviews.owner, 
-      reviews.title, 
-      reviews.review_id, 
-      reviews.category, 
-      reviews.review_img_url, 
-      reviews.created_at, 
-      reviews.votes, 
-      reviews.designer
-  `;
+  reviewQuery += " GROUP BY reviews.review_id";
   if (sortBy) {
     const queryIndex = validSorts.indexOf(sortBy);
     if (queryIndex !== -1) {
@@ -66,20 +68,14 @@ exports.selectAllReviews = (sortBy, order, category) => {
   return connection.query(reviewQuery, queryValues).then(({ rows }) => rows);
 };
 
-exports.validateCategory = (category) => {
-  return connection
-    .query("SELECT * FROM categories WHERE slug = $1;", [category])
-    .then(({ rows }) => {
-      if (rows.length > 0) {
-        Promise.resolve();
-      } else {
-        return Promise.reject({ status: 400, msg: "Invalid category query" });
-      }
-    });
-};
-
 exports.selectReviewById = (review_id) => {
-  const reviewQuery = "SELECT * FROM reviews WHERE review_id = $1";
+  const reviewQuery = `
+  SELECT reviews.*, COUNT(comments.comment_id)::INTEGER AS comment_count
+  FROM reviews
+  LEFT JOIN comments on reviews.review_id = comments.review_id
+  WHERE reviews.review_id = $1
+  GROUP BY reviews.review_id;
+  `;
   return connection.query(reviewQuery, [review_id]).then(({ rows }) => {
     const review = rows[0];
     if (review) {
