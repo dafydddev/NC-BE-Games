@@ -1,11 +1,23 @@
 const express = require("express");
 const app = express();
 const { getCategories } = require("./controllers/categories.controllers");
-const { getReview, getAllReviews, patchReviewVotes } = require("./controllers/reviews.controllers");
+const {
+  getReview,
+  getAllReviews,
+  patchReviewVotes,
+} = require("./controllers/reviews.controllers");
 const { readEndpoints } = require("./controllers/endpoints.controllers");
+const {
+  getCommentById,
+  postCommentById,
+  removeComment,
+} = require("./controllers/comments.controllers");
+const {
+  handleCustomErrors,
+  handlePsqlErrors,
+  handleServerErrors,
+} = require("./errors");
 const { getUsers } = require("./controllers/users.controllers");
-const { getCommentById, postCommentById, removeComment } = require("./controllers/comments.controllers");
-const { handleCustomErrors, handlePsqlErrors, handleServerErrors } = require("./errors");
 
 app.use(express.json());
 

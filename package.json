@@ -9,7 +9,7 @@
     "prepare": "husky install",
     "start": "node listen.js",
     "seed-prod": "NODE_ENV=production npm run seed",
-    "test": "psql -f ./db/setup.sql && NODE_ENV=test jest --runInBand ./__tests__/"
+    "test": "NODE_ENV=test jest --runInBand ./__tests__/"
   },
   "repository": {
     "type": "git",
