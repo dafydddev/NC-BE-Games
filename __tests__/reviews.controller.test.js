@@ -249,7 +249,6 @@ describe("GET /api/reviews ordering", () => {
       });
   });
 });
-
 describe("GET /api/reviews category filtering", () => {
   test("GET /api/reviews should support filtering by category", () => {
     return request(app)
