@@ -34,3 +34,20 @@ exports.deleteCommentByCommentId = (comment_id) => {
     }
   });
 };
+
+exports.updateCommentVotesById = (comment_id, inc_votes) => {
+  const reviewQuery =
+    "UPDATE comments SET votes = votes + $1 WHERE comment_id = $2 RETURNING *;";
+  return connection
+    .query(reviewQuery, [inc_votes, comment_id])
+    .then(({ rows }) => {
+      const comment = rows[0];
+      if (comment) {
+        return comment;
+      }
+      return Promise.reject({
+        status: 404,
+        msg: `No comment found for comment_id: ${comment_id}`,
+      });
+    });
+};

@@ -2,6 +2,7 @@ const {
   selectCommentsReviewById,
   insertCommentByReviewId,
   deleteCommentByCommentId,
+  updateCommentVotesById,
 } = require("../models/comments.models");
 
 exports.getCommentById = (req, res, next) => {
@@ -30,4 +31,18 @@ exports.removeComment = (req, res, next) => {
   deleteCommentByCommentId(comment_id)
     .then(() => res.status(204).send())
     .catch(next);
+};
+
+exports.patchCommentVotes = (req, res, next) => {
+  const { comment_id } = req.params;
+  const { inc_votes } = req.body;
+  if (!inc_votes) {
+    res.status(400).send({
+      msg: "inc_votes is required and value must be greater or less than 0",
+    });
+  } else {
+    updateCommentVotesById(comment_id, inc_votes)
+    .then((returnedComment) => res.status(200).send(returnedComment))
+    .catch(next);  
+  };
 };

@@ -173,3 +173,157 @@ describe("DELETE /api/comments/:comment_id", () => {
       });
   });
 });
+describe("PATCH /api/comments/:comment_id", () => {
+  test("PATCH /api/comments/:comment_id should return 200 status code", () => {
+    validVotes = {
+      inc_votes: 1,
+    };
+    return request(app).patch("/api/comments/1").send(validVotes).expect(200);
+  });
+  test("PATCH /api/comments/:comment_id should return the updated comment", () => {
+    validVotes = {
+      inc_votes: 1,
+    };
+    expectedOutcome = {
+      body: "I loved this game too!",
+      votes: 17,
+      author: "bainesface",
+      review_id: 2,
+      comment_id: 1,
+      created_at: "2017-11-22T12:43:33.389Z",
+    };
+    return request(app)
+      .patch("/api/comments/1")
+      .send(validVotes)
+      .expect(200)
+      .then((returnedReturn) => {
+        expect(returnedReturn.body).toEqual(expectedOutcome);
+      });
+  });
+  test("PATCH /api/comments/:comments_id should increment the votes when passed a positive number", () => {
+    validVotes = {
+      inc_votes: 1,
+    };
+    expectedOutcome = {
+      body: "I loved this game too!",
+      votes: 17,
+      author: "bainesface",
+      review_id: 2,
+      comment_id: 1,
+      created_at: "2017-11-22T12:43:33.389Z",
+    };
+    return request(app)
+      .patch("/api/comments/1")
+      .send(validVotes)
+      .expect(200)
+      .then((returnedReturn) => {
+        expect(returnedReturn.body).toEqual(expectedOutcome);
+      });
+  });
+  test("PATCH /api/comments/:comments_id should decrement the votes when passed a negative number", () => {
+    validVotes = {
+      inc_votes: -1,
+    };
+    expectedOutcome = {
+      body: "I loved this game too!",
+      votes: 15,
+      author: "bainesface",
+      review_id: 2,
+      comment_id: 1,
+      created_at: "2017-11-22T12:43:33.389Z",
+    };
+    return request(app)
+      .patch("/api/comments/1")
+      .send(validVotes)
+      .expect(200)
+      .then((returnedReturn) => {
+        expect(returnedReturn.body).toEqual(expectedOutcome);
+      });
+  });
+  test("PATCH /api/comments/:comments_id should support decrementing the votes below 0", () => {
+    validVotes = {
+      inc_votes: -17,
+    };
+    expectedOutcome = {
+      body: "I loved this game too!",
+      votes: -1,
+      author: "bainesface",
+      review_id: 2,
+      comment_id: 1,
+      created_at: "2017-11-22T12:43:33.389Z",
+    };
+    return request(app)
+      .patch("/api/comments/1")
+      .send(validVotes)
+      .expect(200)
+      .then((returnedReturn) => {
+        expect(returnedReturn.body).toEqual(expectedOutcome);
+      });
+  });
+  test("PATCH /api/comments/:comment_id should output appropriate error messages when passed object without inc_votes key", () => {
+    emptyObject = {};
+    return request(app)
+      .patch("/api/comments/1")
+      .send(emptyObject)
+      .expect(400)
+      .then((returnedError) => {
+        expect(returnedError.body).toEqual({
+          msg: "inc_votes is required and value must be greater or less than 0",
+        });
+      });
+  });
+  test("PATCH /api/comments/:comment_id should output appropriate error messages when passed object with invalid inc_votes key", () => {
+    invalidVotes = {
+      inc_votes: "hello",
+    };
+    return request(app)
+      .patch("/api/comments/1")
+      .send(invalidVotes)
+      .expect(400)
+      .then((returnedError) => {
+        expect(returnedError.body).toEqual({ msg: "Bad Request" });
+      });
+  });
+  test("PATCH /api/comments/:comment_id should output appropriate error messages when passed inc votes with 0 value", () => {
+    invalidVotes = {
+      inc_votes: 0,
+    };
+    return request(app)
+      .patch("/api/comments/1")
+      .send(invalidVotes)
+      .expect(400)
+      .then((returnedError) => {
+        expect(returnedError.body).toEqual({
+          msg: "inc_votes is required and value must be greater or less than 0",
+        });
+      });
+  });
+  test("PATCH /api/comments/:comment_id should output appropriate error messages when passed an id that gives no results", () => {
+    validVotes = {
+      inc_votes: 1,
+    };
+    return request(app)
+      .patch("/api/comments/100")
+      .send(validVotes)
+      .expect(404)
+      .then((response) => {
+        expect(response.body).toEqual({
+          msg: "No comment found for comment_id: 100",
+        });
+      });
+  });
+  test("PATCH /api/comments/:comment_id should output appropriate error messages when passed an invalid id", () => {
+    validVotes = {
+      inc_votes: 1,
+    };
+    return request(app)
+      .patch("/api/comments/jhsfjksdf")
+      .send(validVotes)
+      .expect(400)
+      .then((response) => {
+        expect(response.body).toEqual({
+          msg: "Bad Request",
+        });
+      });
+  });
+});
