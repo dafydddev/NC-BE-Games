@@ -1,42 +1,25 @@
 const express = require("express");
 const app = express();
-const { getCategories } = require("./controllers/categories.controllers");
-const {
-  getReview,
-  getAllReviews,
-  patchReviewVotes,
-} = require("./controllers/reviews.controllers");
+
+const reviewsRouter = require('./routers/reviewsRouter');
+const commentsRouter = require('./routers/commentsRouter');
+const usersRouter = require('./routers/usersRouter');
+const categoriesRouter = require('./routers/categoriesRouter');
 const { readEndpoints } = require("./controllers/endpoints.controllers");
-const {
-  getCommentById,
-  postCommentById,
-  removeComment,
-} = require("./controllers/comments.controllers");
+
 const {
   handleCustomErrors,
   handlePsqlErrors,
   handleServerErrors,
-} = require("./errors");
-const { getAllUsers, getUser } = require("./controllers/users.controllers");
+ } = require("./errors");
 
 app.use(express.json());
 
 app.get("/api", readEndpoints);
-
-app.get("/api", readEndpoints);
-app.get("/api/categories", getCategories);
-
-app.get("/api/users", getAllUsers);
-app.get("/api/users/:username", getUser);
-
-app.get("/api/reviews", getAllReviews);
-app.get("/api/reviews/:review_id", getReview);
-app.patch("/api/reviews/:review_id", patchReviewVotes);
-
-app.get("/api/reviews/:review_id/comments", getCommentById);
-app.post("/api/reviews/:review_id/comments", postCommentById);
-
-app.delete("/api/comments/:comment_id", removeComment);
+app.use('/api/categories', categoriesRouter);
+app.use('/api/reviews', reviewsRouter);
+app.use('/api/comments', commentsRouter);
+app.use('/api/users', usersRouter);
 
 app.get("*", (req, res) =>
   res.status(404).send({ message: "Endpoint Not Found" })
