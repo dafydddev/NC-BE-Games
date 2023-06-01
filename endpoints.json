@@ -122,7 +122,8 @@
   "POST /api/reviews/:review_id/comments": {
     "description": "adds a comment by review_id, takes a username and body, and returns added comment",
     "exampleRequest": {
-      "inc_votes": 1
+      "username": "mallionaire",
+      "body": "blah"
     },
     "exampleResponse": {
       "body": "This is my comment"
