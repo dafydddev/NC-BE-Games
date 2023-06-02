@@ -12,7 +12,7 @@ exports.validateCategory = (category) => {
     });
 };
 
-exports.selectAllReviews = (sortBy, order, category) => {
+exports.selectAllReviews = (sort_by, order, category) => {
   const validSorts = [
     "owner",
     "title",
@@ -45,8 +45,8 @@ exports.selectAllReviews = (sortBy, order, category) => {
     queryValues.push(category);
   }
   reviewQuery += " GROUP BY reviews.review_id";
-  if (sortBy) {
-    const queryIndex = validSorts.indexOf(sortBy);
+  if (sort_by) {
+    const queryIndex = validSorts.indexOf(sort_by);
     if (queryIndex !== -1) {
       reviewQuery += ` ORDER BY ${validSorts[queryIndex]}`;
     } else {
